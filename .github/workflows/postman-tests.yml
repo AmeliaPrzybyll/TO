@@ -1,35 +1,17 @@
-name: Run Postman Tests
-
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-
+name: Automated API tests using Postman CLI
+ 
+on: push
+ 
 jobs:
-  postman-tests:
+  automated-api-tests:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-
-      - name: Install Newman
-        run: npm install -g newman
-
-      - name: Run Newman tests
+      - uses: actions/checkout@v4
+      - name: Install Postman CLI
         run: |
-          newman run my_collection.json \
-            -e my_enviroment.json \
-            --reporters cli,junit \
-            --reporter-junit-export newman-report.xml
-
-      - name: Upload test report
-        uses: actions/upload-artifact@v4
-        with:
-          name: newman-report
-          path: newman-report.xml
+          curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
+      - name: Login to Postman CLI
+        run: postman login --with-api-key "PMAK-692ad721befc220001b189ee-f7120440f2720d511071f8da5993e790e6"
+      - name: Run API tests
+        run: |
+          postman collection run "49200503-645aa881-c677-4772-ab89-4602bd6dda4f" -e "49200503-1e30cfea-0663-4b06-9fb6-1f77f645e446"
