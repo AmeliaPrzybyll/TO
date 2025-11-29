@@ -24,7 +24,7 @@ jobs:
       - name: Run Newman tests
         run: |
           newman run my_collection.json \
-            -e my_environment.json \
+            -e my_enviroment.json \
             --reporters cli,junit \
             --reporter-junit-export newman-report.xml
 
